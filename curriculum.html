@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Marco Ceriani</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type='text/css'>
+    <style>
+        /* reset */
+        :root {
+            --clr-red: hsl(359, 53%, 35%);
+            --clr-yellow: hsl(42, 85%, 67%);
+            --clr-white: hsl(0, 0%, 97%);
+            --clr-gray-500: hsl(0, 0%, 50%);
+            --clr-gray-700: hsl(0, 0%, 75%);
+            --clr-gray-800: hsl(0, 0%, 88%);
+            --clr-text: hsl(210, 33%, 15%);
+            --clr-line: var(--clr-red);
+            --ff-primary: 'Lato', 'sans-serif';
+            --pad-1: 0.7rem;
+            --pad-2: 1.25rem;
+            --pad-3: 1.5rem;
+            --sz-left-width: 24%;
+            --line-width: 1px;
+        }
+        html {
+            box-sizing: border-box;
+        }
+        *, *::before, *::after {
+            box-sizing: inherit;
+        }
+        body, div, h1, h2, h3, h4, h5, h6, p, th, td, ul, ol {
+            padding: 0px;
+            margin: 0px;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        ul {
+            --list-padding: 1ch;
+            padding-inline-start: var(--list-padding);
+        }
+        li {
+            list-style: none;
+            position: relative;
+        }
+        li::before {
+            content: "\2010";
+            position: absolute;
+            left: calc(-1 * var(--list-padding));
+        }
+        /* Layout */
+        body {
+            font-family: var(--ff-primary);
+            font-size: 18px;
+            line-height: 1.5;
+            font-weight: lighter;
+            color: var(--clr-text);
+            background-color: var(--clr-gray-800);
+        }
+        .container {
+            width: min(100%, 1200px);
+            margin-inline: auto;
+            background-color: var(--clr-white);
+            box-shadow: 0.25rem 0.25rem 1rem hsl(0 0% 40% / .3);
+        }
+        .title-bar,
+        .section > h3,
+        .europass th,
+        .europass td,
+        .summary,
+        .contacts {
+            padding-inline: var(--pad-x);
+        }
+
+        header, footer, section {
+            --pad-x: var(--pad-2);
+        }
+        header {
+            padding-block: var(--pad-2);
+        }
+        footer {
+            background-color: var(--clr-red);
+            color: var(--clr-white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-inline: var(--pad-x);
+            padding-block: 0.5rem;
+            font-size: 1.5rem;
+            gap: var(--pad-2);
+        }
+
+        section > h3 {
+            text-align: center;
+            font-weight: 600;
+            padding-block: 1rem;
+            background: linear-gradient(45deg, var(--clr-white) 0%, var(--clr-yellow) 100%);
+            padding-inline: var(--pad-x);
+        }
+
+        .title-bar {
+            background-color: var(--clr-red);
+            color: var(--clr-white);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            font-size: 1.25rem;
+        }
+        .title-bar h2 {
+            font-size: 1.5rem;
+        }
+
+        .top-area {
+            padding-block: var(--pad-2);
+            display: flex;
+            flex-direction: column;
+            gap: var(--pad-2);
+        }
+        .summary {
+            flex: 3;
+        }
+        .contacts {
+            flex: 2;
+        }
+        .contacts table {
+            border-collapse: collapse;
+            font-size: 1rem;
+        }
+        .contacts table th {
+            text-align: start;
+        }
+
+        /* Europass Layout (mobile / general) */
+        .europass {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .europass th {
+            text-align: start;
+            display: block;
+            padding-block-start: var(--pad-1);
+        }
+        .europass td {
+            display: block;
+        }
+        .europass tbody > tr:last-child > td {
+            padding-block-end: var(--pad-2);
+        }
+        .europass :where(tbody:not(:last-child) > tr:last-child > td) {
+            border-block-end: 1px solid #ddd;
+        }
+
+        .paper-authors,
+        .publication-details {
+            font-style: italic;
+        }
+
+        /* nerdy JSON table */
+        .contacts table {
+            font-family: Inconsolata, monospace;
+            line-height: 1.3;
+        }
+        .contacts th {
+            font-weight: inherit;
+            vertical-align: top;
+            padding-inline-start: 0.5em;
+        }
+        .contacts th::before, 
+        .contacts td::before, 
+        .contacts td::after {
+            content: '"';
+        }
+        .contacts th::after {
+            content: '":';
+        }
+        .contacts table::before {
+            content: '{';
+        }
+        .contacts table::after {
+            content: '}';
+        }
+
+        /* expand details */
+        .expand-btn {
+            padding: 0.35em 0.7em;
+            background-color: var(--clr-white);
+            border: 1px solid var(--clr-yellow);
+            box-shadow: 0 0 .125em var(--clr-gray-700);
+            border-radius: 0.3em;
+            cursor: pointer;
+            margin-block-start: var(--pad-1);
+            margin-inline: var(--pad-x);
+        }
+        .expand-btn:hover {
+            box-shadow: 0 0 .5em var(--clr-gray-700);
+        }
+        .expandable {
+            display: none;
+            opacity: 0;
+            transition: opacity 500ms;
+        }
+        .expanded {
+            display: initial;
+            opacity: 0;
+        }
+        .visually-expanded {
+            display: initial;
+            opacity: 1;
+        }
+
+        /* icons */
+        .social-link {
+            line-height: 1em;
+            padding-inline: 0;
+        }
+        .social-link svg {
+            width: 100%;
+            height: 1em;
+        }
+        svg path {
+            fill: currentColor;
+        }
+
+        @media print, (min-width: 768px) {
+            .top-area {
+                flex-direction: row;
+                border-block-end: 1px solid var(--clr-line);
+            }
+            .summary {
+                padding-inline-end: 0;
+            }
+            .contacts {
+                padding-inline-start: 0;
+            }
+
+            section > h3 {
+                display: block;
+                box-sizing: content-box;
+                margin-inline-start: calc(var(--sz-left-width) - var(--line-width));
+                border-left: var(--line-width) solid var(--clr-line);
+                text-align: start;
+            }
+
+            .europass td,
+            .europass th {
+                display: table-cell;
+                padding-block-start: 0;
+                border-block-end: 0;
+            }
+            .europass th {
+                width: var(--sz-left-width);
+                /*border-right: var(--line-width) solid var(--clr-line);*/
+                text-align: end;
+                vertical-align: top;
+            }
+            .europass td {
+                border-left: var(--line-width) solid var(--clr-line);
+            }
+            .europass tbody:first-child tr:first-child :is(th, td) {
+                padding-block-start: var(--pad-1);
+            } 
+        }
+
+        @media print {
+            :root {
+                --clr-line: hsl(0 0% 20%);
+                --line-width: 1px;
+            }
+            body {
+                font-size: 14px;
+                font-weight: normal;
+                line-height: 1.4;
+                background-color: transparent;
+            }
+            .container {
+                width: 100%;
+                box-shadow: none;
+            }
+            header.title-bar, footer {
+                background-color: transparent;
+                color: black;
+            }
+
+            button {
+                display: none;
+            }
+            .container {
+                background-color: white;
+            }
+
+            .title-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                border-block-end: 1px solid var(--clr-line);
+            }
+            .title-bar a {
+                display: block;
+            }
+
+            section > h3 {
+                text-decoration: underline;
+                padding-block: 0;
+                background: white;
+            }
+            .top-area + section > h3 {
+                padding-block-start: var(--pad-1);
+            }
+
+            footer {
+                font-size: 12px;
+                flex-direction: column;
+                align-items: start;
+                gap: 2px;
+                border-block-start: 1px solid var(--clr-line);
+            }
+            .social-link svg {
+                display: none;
+            }
+            .social-link::after {
+                content: attr(href);
+            }
+            .social-link::before {
+                content: attr(aria-label) ": ";
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="title-bar">
+            <h1>Marco Ceriani</h1>
+            <h2>Ingegnere del Software</h2>
+        </header>
+        <main>
+            <div class="top-area">
+                <section class="summary">
+                    <h4>Profilo</h4>
+                    Perché lavorare in IT? Per la soddisfazione che si prova costruendo strumenti in grado di svolgere dei compiti autonomamente.
+                    Dal primo "hello world" ho avuto esperienze in tutto lo stack applicativo, da progettazi di logica hardware, sviluppo di software embedded,
+                    per poi prendere la carriera di sviluppatore back-end, soprattutto con tecnologie web; a livello hobbistico amo anche mettermi alla prova sul fronte UI.
+                </section>
+                <section class="contacts" aria-labelledby="personal-data">
+                    <h4 id="personal-data">Informazioni Personali</h4>
+                    <table>
+                        <tr><th>indirizzo</th><td>via 4 Novembre n.97, 20013 Magenta (MI)</td></tr>
+                        <tr><th>telefono</th><td><a href="tel:3491215291">349 1215 291</a></td></tr>
+                        <tr><th>email</th><td><a href="mailto:il.marco.ceriani@gmail.com">il.marco.ceriani@gmail.com</a></td></tr>
+                        <tr><th>nato</th><td>07 Maggio 1984</td></tr>
+                    </table>
+                </section>
+            </div>
+            <section aria-labelledby="professional-experience">
+                <h3 id="professional-experience">Esperienza professionale</h3>
+                <table class="europass">
+                    <tbody>
+                        <tr>
+                            <th>Periodo</th>
+                            <td>Da Ottobre 2014</td>
+                        </tr>
+                        <tr>
+                            <th>Posizione o titolo</th>
+                            <td>Ingegnere del Software</td>
+                        </tr>
+                        <tr>
+                            <th>Datore di lavoro</th>
+                            <td>EidosMedia s.p.a.</td>
+                        </tr>
+                        <tr>
+                            <th>Mansioni e responsabilità</th>
+                            <td>Ho lavorato su diversi dei servizi backend.
+                                <ul>
+                                    <li>Editorial API: server REST basato su tecnologie standard Java EE.
+                                        Col team abbiamo progettato e realizzato nuove funzionalità, e portato logica legacy su interfacce più standardizzate
+                                        e design del codice più manutenibile. Ho anche fatto analisi di prestazioni,
+                                        e aituato nella scrittura di test automatici.</li>
+                                    <li>Document Repository: server C++ con interfacce CORBA, basato su un database ad oggetti.
+                                        Ho implementato nuove API e introdotto migliorie non funzionali, e.g. sul fronte della sicurezza;
+                                        ho analizzato e risolto bug, colli di bottiglia nelle prestazioni, e aiutato a manutenere la pipeline di compilazione.</li>
+                                    <li>Event Notification Service: servizio Java con WebSockets, in sostituzione di un servizio C++.
+                                        Ho progettato e implementato le funzionalità più avanzate, e scritto test automatici per l'intero servizio.</li>
+                                    <li>Single Sign On. Ho fornito supporto interno e risolto bug su una versione custom di Apero CAS.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th>Periodo</th>
+                            <td>Da Febbario 2012 a Dicembre 2012</td>
+                        </tr>
+                        <tr>
+                            <th>Posizione o titolo</th>
+                            <td>Post-master research associate</td>
+                        </tr>
+                        <tr>
+                            <th>Datore di lavoro</th>
+                            <td>Pacific Northwest National Laboratory Richland, WA - Stati Uniti</td>
+                        </tr>
+                        <tr>
+                            <th>Mansioni e responsabilità</th>
+                            <td>Progettazione e prototipazione su dispositivi hardware riconfigurabili di una architettura distribuita,
+                                specificamente ottimizzata per l’esecuzione di applicationi irregolari. 
+                                Utilizzati i linguaggi verilog e C, e dispositivi FPGA Xilinx.</td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th>Periodo</th>
+                            <td>Da Gennaio 2011 a Aprile 2015</td>
+                        </tr>
+                        <tr>
+                            <th>Posizione o titolo</th>
+                            <td>Dottorando in Ingegneria dell’Informazione</td>
+                        </tr>
+                        <tr>
+                            <th>Datore di lavoro</th>
+                            <td>Politecnico di Milano, Via Ponzio, 34/5 - 20133 Milano</td>
+                        </tr>
+                        <tr>
+                            <th>Mansioni e responsabilità</th>
+                            <td>Ricerca su architetture dei calcolatori dedicate allo sviluppo di algoritmi software irregolari, e.g. analisi di grafi, in ambito di High Performance Computing.</td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th>Periodo</th>
+                            <td>Da Marzo 2010 a Giugno 2010</td>
+                        </tr>
+                        <tr>
+                            <th>Posizione o titolo</th>
+                            <td>Assistente di laboratorio</td>
+                        </tr>
+                        <tr>
+                            <th>Datore di lavoro</th>
+                            <td>Politecnico di Milano, Via Ponzio, 34/5 - 20133 Milano</td>
+                        </tr>
+                        <tr>
+                            <th>Mansioni e responsabilità</th>
+                            <td>Ho tenuto lezioni pratiche di programmazione a supporto di un corso di base sul linguaggio C.</td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th>Periodo</th>
+                            <td>Da Novembre 2009 a Dicembre 2010</td>
+                        </tr>
+                        <tr>
+                            <th>Posizione o titolo</th>
+                            <td>Consulente</td>
+                        </tr>
+                        <tr>
+                            <th>Datore di lavoro</th>
+                            <td>@Logistics Reply S.r.l, Via Castellanza, 11 - 20151 Milano</td>
+                        </tr>
+                        <tr>
+                            <th>Mansioni e responsabilità</th>
+                            <td>Ho sviluppato nuove funzionalità per una applicazione in ambito supply chain execution per l’azienda BTicino. Le tecnologie utilizzate erano Java EE, Oracle ADF ed Oracle Database, ed i linguaggi Java e PL/SQL. Il ruolo prevedeva lo sviluppo, il testing, la gestione dei rilasci in ambiente di validazione, identificazione e risoluzione di bug.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section aria-labelledby="education-training">
+                <h3 id="education-training">Istruzione e Formazione</h3>
+                <table class="europass">
+                    <tbody>
+                        <tr>
+                            <th>Periodo</th>
+                            <td>Da 2006 a 2009</td>
+                        </tr>
+                        <tr>
+                            <th>Qualifica rilasciata</th>
+                            <td>Laurea magistrale in ingegneria informatica, Politecnico di Milano</td>
+                        </tr>
+                        <tr>
+                            <th>Votazione</th>
+                            <td>110L/110</td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th>Periodo</th>
+                            <td>Da 2003 a 2006</td>
+                        </tr>
+                        <tr>
+                            <th>Qualifica rilasciata</th>
+                            <td>Laurea in ingegneria informatica, Politecnico di Milano</td>
+                        </tr>
+                        <tr>
+                            <th>Votazione</th>
+                            <td>110L/110</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section aria-labelledby="skills">
+                <h3 id="skills">Competenze ed Abilità</h3>
+                <table class="europass">
+                    <tbody>
+                        <tr>
+                            <th>Lingue</th>
+                            <td>Inglese: C1 ascolto, lettura, interazione, B2 produzione orale, scritto</td>
+                        </tr>
+                        <tr>
+                            <th>Tecnologie</th>
+                            <td>Java (8, 11), C++ ('99, 11), Python (2.7), Javascript, HTML, CSS, maven, JUnit, REST, Spring, Spring Cloud,
+                                Hazelcast, React, MongoDB, Docker, Kubernetes, Linux</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+            <section aria-labelledby="publications">
+                <h3 id="publications">Pubblicazioni <button id="expand-publications" class="expand-btn">Show details</button></h3>
+                <table class="europass">
+                    <tr>
+                        <th></th>
+                        <td class="publication"><label class="paper-authors expandable">Simone Secchi, Marco Ceriani, Antonino Tumeo, Oreste Villa, Gianluca Palermo, and Luigi Raffo. </label>Exploring hardware support for scaling irregular applications on multinode multi-core architectures.<label class="publication-details expandable"> In Application-Specific Systems, Architectures and Processors (ASAP), 2013 IEEE 24th International Conference on, pages 309–313.</label> IEEE, 2013</td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td class="publication"><label class="paper-authors expandable">Marco Ceriani, Gianluca Palermo, Simone Secchi, Antonino Tumeo, and Oreste Villa. </label>Exploring manycore multinode systems for irregular applications with fpga prototyping.<label class="publication-details expandable"> In Proceedings of the 2013 IEEE 21st Annual International Symposium on Field-Programmable Custom Computing Machines, page 238.</label> IEEE Computer Society, 2013</td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td class="publication"><label class="paper-authors expandable">Marco Ceriani, Simone Secchi, Antonino Tumeo, and Oreste Villa. </label>Prototyping hardware support for irregular applications.<label class="publication-details expandable"> In Proceedings of the 2013 Workshop on Rapid Simulation and Performance Evaluation: Methods and Tools,</label> 2013</td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td class="publication"><label class="paper-authors expandable">Marco Ceriani, Fabrizio Ferrandi, Pier Luca Lanzi, Donatella Sciuto, and Antonino Tumeo. </label>Multiprocessor systems-on-chip synthesis using multi-objective evolutionary computation.<label class="publication-details expandable"> In Proceedings of the 12th annual conference on Genetic and evolutionary computation,</label> 2010</td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td class="publication"><label class="paper-authors expandable">A. Tumeo, M. Branca, L. Camerini, M. Ceriani, M. Monchiero, G. Palermo, F. Ferrandi, and D. Sciuto. </label>Prototyping pipelined applications on a heterogeneous FPGA multiprocessor virtual platform.<label class="publication-details expandable"> In Design Automation Conference, 2009.</label> ASP-DAC 2009</td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <td class="publication"><label class="paper-authors expandable">A. Tumeo, M. Branca, L. Camerini, M. Ceriani, M. Monchiero, G. Palermo, F. Ferrandi, and D. Sciuto. </label>A Dual-Priority Real-Time multiprocessor system on FPGA for automotive applications.<label class="publication-details expandable"> In Design, Automation and Test in Europe, 2008.</label> DATE ’08, 2008</td>
+                    </tr>
+                </table>
+            </section>
+        </main>
+        <footer>
+            <a href="https://www.linkedin.com/in/marcoceriani84/" class="social-link" aria-label="LinkedIn profile">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+            </a>
+            <a href="https://github.com/marco-ceriani/" class="social-link" aria-label="GitHub profile">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!-- Font Awesome Pro 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+            </a>
+        </footer>
+    </div>
+    <script>
+        document.onreadystatechange = () => {
+            if (document.readyState === 'complete') {
+                console.log('ready')
+                const pubs_expand_button = document.querySelector("#expand-publications")
+                const expandable_sections = document.querySelectorAll(".expandable")
+                pubs_expand_button.addEventListener('click', () => {
+                    pubs_expand_button.innerText =  pubs_expand_button.innerText.includes('Show') ? 'Hide details' : 'Show details'
+                    expandable_sections.forEach(item => {
+                        if (item.classList.contains('expanded')) {
+                            item.classList.remove('visually-expanded')
+                            item.addEventListener('transitionend', e => {
+                                item.classList.remove('expanded')
+                            }, {
+                          capture: false,
+                          once: true,
+                          passive: true
+                        })
+                        } else {
+                            item.classList.add('expanded')
+                            setTimeout(() => item.classList.add('visually-expanded'), 20)
+                        }
+                    })
+                })
+            }
+        };
+    </script>
+</body>

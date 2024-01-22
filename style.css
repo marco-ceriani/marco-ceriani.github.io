@@ -1,0 +1,93 @@
+/* Reset */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+img, picture, svg, video {
+    display: block;
+    max-width: 100%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+}
+
+/* Properties */
+:root {
+    --clr-red: oklch(35% 0.129 23.24);
+    --clr-yellow: hsl(42.2, 100%, 71.6%);
+    --clr-neutral-99: oklch(99% 0.028 265.63);
+    --clr-neutral-50: oklch(55% 0.028 265.63);
+    --clr-neutral-20: oklch(20% 0.028 265.63);
+
+    /* Light theme */
+    --clr-text: var(--clr-neutral-20);
+    --clr-paper: var(--clr-neutral-99);
+    --clr-border: var(--clr-neutral-20);
+}
+
+/* Main style */
+html {
+    color-scheme: dark light;
+    color: var(--clr-text);
+    background-color: var(--clr-neutral-50);
+    font-family: system, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+}
+
+header {
+    padding-block: 1rem;
+}
+
+nav {
+    border-bottom: 1px solid var(--clr-border);
+}
+
+nav ul {
+    display: flex;
+    padding-block: 1rem;
+    gap: 2rem;
+}
+
+nav li {
+    list-style: none;
+}
+nav a {
+    text-decoration: none;
+}
+
+nav a,
+nav a:visited {
+    color: var(--clr-red);
+}
+
+.page-wrapper {
+    max-width: 1100px;
+    margin-inline: auto;
+    min-height: 100vh;
+    box-shadow: 0.25rem 0.25rem 1rem hsl(0 0% 40% / .3);
+    background-color: var(--clr-paper);
+}
+
+.page-wrapper > * {
+    padding-inline: 2rem;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --clr-text: var(--clr-neutral-99);
+        --clr-paper: var(--clr-neutral-20);
+        --clr-red: oklch(65% 0.129 23.24);
+        --clr-border: var(--clr-neutral-99);
+    }
+}
