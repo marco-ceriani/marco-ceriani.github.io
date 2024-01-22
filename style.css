@@ -17,11 +17,10 @@ img, picture, svg, video {
 
 /* Properties */
 :root {
-    --clr-red: oklch(35% 0.129 23.24);
-    --clr-yellow: hsl(42.2, 100%, 71.6%);
-    --clr-neutral-99: oklch(99% 0.028 265.63);
-    --clr-neutral-50: oklch(55% 0.028 265.63);
-    --clr-neutral-20: oklch(20% 0.028 265.63);
+    --clr-accent: oklch(40% 0.122 52.11);
+    --clr-neutral-99: oklch(99% 0.03 52.37);
+    --clr-neutral-50: oklch(55% 0.03 52.37);
+    --clr-neutral-20: oklch(20% 0.03 52.37);
 
     /* Light theme */
     --clr-text: var(--clr-neutral-20);
@@ -64,7 +63,7 @@ nav a {
 
 nav a,
 nav a:visited {
-    color: var(--clr-red);
+    color: var(--clr-accent);
 }
 
 .page-wrapper {
@@ -87,7 +86,7 @@ h1 {
     :root {
         --clr-text: var(--clr-neutral-99);
         --clr-paper: var(--clr-neutral-20);
-        --clr-red: oklch(65% 0.129 23.24);
         --clr-border: var(--clr-neutral-99);
+        --clr-accent: oklch(80% 0.122 52.11);
     }
 }
