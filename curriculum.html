@@ -19,9 +19,9 @@
             --clr-gray-800: hsl(0, 0%, 88%);
             --clr-text: hsl(210, 33%, 15%);
             --clr-line: var(--clr-red);
-            --ff-primary: 'Lato', 'sans-serif';
+            --ff-primary: 'Lato', system-ui, 'sans-serif';
             --pad-1: 0.7rem;
-            --pad-2: 1.25rem;
+            --pad-2: 1.15rem;
             --pad-3: 1.5rem;
             --sz-left-width: 24%;
             --line-width: 1px;
@@ -295,8 +295,6 @@
             }
 
             .title-bar {
-                flex-direction: column;
-                align-items: flex-start;
                 border-block-end: 1px solid var(--clr-line);
             }
             .title-bar a {
@@ -557,7 +555,6 @@
     <script>
         document.onreadystatechange = () => {
             if (document.readyState === 'complete') {
-                console.log('ready')
                 const pubs_expand_button = document.querySelector("#expand-publications")
                 const expandable_sections = document.querySelectorAll(".expandable")
                 pubs_expand_button.addEventListener('click', () => {
